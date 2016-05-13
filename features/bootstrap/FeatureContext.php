@@ -59,18 +59,33 @@ class FeatureContext implements Context, SnippetAcceptingContext
     {
         $hash = $table->getHash();
         foreach ($hash as $row) {
-            // $row['sku'], $row['qty'], $row['price']
+            // $row['sku'], $row['qty'], $row['unit_price']
+            if ($item = $this->order->getItem($row['sku'])) {
+              if (!is_array($item)) 
+                throw new \Exception(sprintf('Item %s do not found in order.', $row['sku']));
+              if ($item['sku'] != $row['sku']) 
+                throw new \Exception(sprintf('Item SKU %s to be %s.', $item['sku'], $row['sku']));
+              if ($item['qty'] != $row['qty']) 
+                throw new \Exception(sprintf('Item QTY %s to be %s.', $item['qty'], $row['qty']));
+              if ($item['unit_price'] != $row['unit_price']) 
+                throw new \Exception(sprintf('Item UnitPrice %s to be %s.', $item['unit_price'], $row['unit_price']));
+            }
         }
-        throw new PendingException();
     }
 
     /**
      * @Given the shipping cost is :arg1
      */
-    public function theShippingCostIs($arg1)
+    public function theShippingCostIs($cost)
     {
-      return 4.50;
+        if ($this->order->getShippingCost() != $cost) {
+          throw new \Exception(sprintf(
+            'Expected shipping cost is %s.',
+            $this->order->getShippingCost()
+          ));
+        }
     }
+
 
     /**
      * @Then the subtotal is :arg1
