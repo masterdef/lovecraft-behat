@@ -1,0 +1,22 @@
+{
+    "name": "lovecrafts/ecomm_test",
+    "description": "Coding test for eCommerce development roles",
+    "authors": [
+        {
+            "name": "Halil Köklü",
+            "email": "halil@koklu.me"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "behat/behat": "^3.1"
+    },
+    "config": {
+        "bin-dir": "bin/"
+    },
+    "autoload": {
+        "psr-4": {
+            "LoveCrafts\\": "src/LoveCrafts/"
+        }
+    }
+}
