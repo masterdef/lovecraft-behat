@@ -23,6 +23,22 @@ class FeatureContext implements Context, SnippetAcceptingContext
     public function aNewOrderIsCreated()
     {
         $this->order = new Order();
+        
+        $this->order->addItem(array(
+          'sku' => 'SKU1',
+          'qty' => 2,
+          'unit_price' => 9.50
+        ));
+        $this->order->addItem(array(
+          'sku' => 'SKU2',
+          'qty' => 1,
+          'unit_price' => 20.50
+        ));
+        $this->order->addItem(array(
+          'sku' => 'SKU3',
+          'qty' => 5,
+          'unit_price' => 1.00
+        ));
     }
 
     /**
@@ -90,25 +106,40 @@ class FeatureContext implements Context, SnippetAcceptingContext
     /**
      * @Then the subtotal is :arg1
      */
-    public function theSubtotalIs($arg1)
+    public function theSubtotalIs($subtotal)
     {
-        throw new PendingException();
+        if ($this->order->getSubtotal() != $subtotal) {
+          throw new \Exception(sprintf(
+            'Expected subtotal is %s.',
+            $this->order->getSubtotal()
+          ));
+        }
     }
 
     /**
-     * @Then the grand total is :arg1
+     * @Then the grand total is :total
      */
-    public function theGrandTotalIs($arg1)
+    public function theGrandTotalIs($total)
     {
-        throw new PendingException();
+        if ($this->order->getGrandTotal() != $total) {
+          throw new \Exception(sprintf(
+            'Expected Grand Total is %s.',
+            $this->order->getGrandTotal()
+          ));
+        }
     }
 
     /**
      * @Then the number of items ordered is :arg1
      */
-    public function theNumberOfItemsOrderedIs($arg1)
+    public function theNumberOfItemsOrderedIs($numberOfItems)
     {
-        throw new PendingException();
+        if ($this->order->getNumberOfItems() != $numberOfItems) {
+          throw new \Exception(sprintf(
+            'Expected Number of Items is %s.',
+            $this->order->getNumberOfItems()
+          ));
+        }
     }
 
 
