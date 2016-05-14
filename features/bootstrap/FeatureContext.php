@@ -184,31 +184,50 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function theFollowingItemsAreRefunded(TableNode $table)
     {
-        throw new PendingException();
+        $hash = $table->getHash();
+        foreach ($hash as $row) {
+            // $row['sku'], $row['qty']
+            $this->order->refund($row);
+        }
     }
 
     /**
      * @Then the number of items refunded is :arg1
      */
-    public function theNumberOfItemsRefundedIs($arg1)
+    public function theNumberOfItemsRefundedIs($numberOfItems)
     {
-        throw new PendingException();
-    }
+        if ($this->order->getRefundedNumberOfItems() != $numberOfItems) {
+          throw new \Exception(sprintf(
+            'Refunded Number of Items is %s.',
+            $this->order->getRefundedNumberOfItems()
+          ));
+        }
+    } //endfunction
 
     /**
      * @Then the refunded amount is :arg1
      */
-    public function theRefundedAmountIs($arg1)
+    public function theRefundedAmountIs($refundedAmount)
     {
-        throw new PendingException();
+        if ($this->order->getRefundedAmount() != $refundedAmount) {
+          throw new \Exception(sprintf(
+            'Expected Refunded Amount is %s.',
+            $this->order->getRefundedAmount()
+          ));
+        }
     }
 
     /**
      * @Then the shipping cost refunded is :arg1
      */
-    public function theShippingCostRefundedIs($arg1)
+    public function theShippingCostRefundedIs($cost)
     {
-        throw new PendingException();
+        if ($this->order->getShippingCost() != $cost) {
+          throw new \Exception(sprintf(
+            'Expected shipping cost is %s.',
+            $this->order->getShippingCost()
+          ));
+        }
     }
 }
 

@@ -15,6 +15,11 @@ class Order
     private $items = array();
 
     /**
+     * @var array
+     */
+    private $refundedItems = array();
+
+    /**
      * @var float
      */
     private $shippingCost = 4.50;
@@ -78,12 +83,25 @@ class Order
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getNumberOfItems()
     {
       $numberOfItems = 0;
       foreach ($this->getItems() as $item) {
+        $numberOfItems += $item['qty'];
+      }
+
+      return $numberOfItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRefundedNumberOfItems()
+    {
+      $numberOfItems = 0;
+      foreach ($this->getRefundedItems() as $item) {
         $numberOfItems += $item['qty'];
       }
 
@@ -97,6 +115,14 @@ class Order
     public function getShippingCost()
     {
         return $this->shippingCost;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRefundedItems()
+    {
+      return $this->refundedItems;
     }
 
     /**
@@ -123,6 +149,29 @@ class Order
       foreach ($this->getItems() as $item) {
         if ($item['sku'] == $sku) return $item;
       }
+    }
+
+    /**
+     * @param array $item
+     */
+    public function refund($item)
+    {
+      $this->refundedItems[] = $item;
+      $this->setStatus('partially_refunded');
+    }
+
+    /**
+     * @return float
+     */
+    public function getRefundedAmount()
+    {
+      $refundedAmount = 0;
+      foreach ($this->getRefundedItems() as $item) {
+        $orderItem = $this->getItem($item['sku']);
+        $refundedAmount += $item['qty'] * $orderItem['unit_price'];
+      }
+
+      return $refundedAmount;
     }
 
 }
