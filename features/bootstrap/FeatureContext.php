@@ -148,23 +148,35 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function aDiscountOfIsApplied($arg1)
     {
-        throw new PendingException();
+        $this->order->applyDiscount(12.50);
+        //throw new PendingException();
     }
 
     /**
      * @Then the subtotal should be :arg1
      */
-    public function theSubtotalShouldBe($arg1)
+    public function theSubtotalShouldBe($subtotal)
     {
-        throw new PendingException();
+        if ($this->order->getSubtotal() != $subtotal) {
+          throw new \Exception(sprintf(
+            'Expected subtotal %s is %s.',
+            $subtotal,
+            $this->order->getSubtotal()
+          ));
+        }
     }
 
     /**
      * @Then the grand total should be :arg1
      */
-    public function theGrandTotalShouldBe($arg1)
+    public function theGrandTotalShouldBe($total)
     {
-        throw new PendingException();
+        if ($this->order->getGrandTotal() != $total) {
+          throw new \Exception(sprintf(
+            'Expected Grand Total is %s.',
+            $this->order->getGrandTotal()
+          ));
+        }
     }
 
     /**

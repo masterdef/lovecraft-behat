@@ -20,11 +20,32 @@ class Order
     private $shippingCost = 4.50;
 
     /**
+     * @var float
+     */
+    private $discount = 0;
+
+    /**
      * @param string $status
      */
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @param float $discount
+     */
+    public function applyDiscount($discount)
+    {
+        $this->discount = $discount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscount()
+    {
+      return (float)$this->discount;
     }
 
     /**
@@ -48,7 +69,7 @@ class Order
      */
     public function getSubtotal()
     {
-      $subtotal = 0;
+      $subtotal = -($this->getDiscount());
       foreach ($this->getItems() as $item) {
         $subtotal += $item['qty'] * $item['unit_price'];
       }
