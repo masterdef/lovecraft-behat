@@ -96,7 +96,8 @@ class FeatureContext implements Context, SnippetAcceptingContext
     {
         if ($this->order->getShippingCost() != $cost) {
           throw new \Exception(sprintf(
-            'Expected shipping cost is %s.',
+            'Expected shipping cost %s is %s.',
+            $cost,
             $this->order->getShippingCost()
           ));
         }
@@ -224,10 +225,19 @@ class FeatureContext implements Context, SnippetAcceptingContext
     {
         if ($this->order->getShippingCost() != $cost) {
           throw new \Exception(sprintf(
-            'Expected shipping cost is %s.',
+            'Expected refunded shipping cost %s is %s.',
+            $cost,
             $this->order->getShippingCost()
           ));
         }
+    }
+
+    /**
+     * @When action the shipping cost is refunded
+     */
+    public function actionTheShippingCostIsRefunded()
+    {
+        $this->order->refundShipping();
     }
 }
 

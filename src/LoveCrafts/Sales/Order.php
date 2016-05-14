@@ -27,6 +27,11 @@ class Order
     /**
      * @var float
      */
+    private $refundedShippingCost = 0;
+
+    /**
+     * @var float
+     */
     private $discount = 0;
 
     /**
@@ -35,6 +40,30 @@ class Order
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setShippingCost($shippingCost)
+    {
+        $this->shippingCost = $shippingCost;
+    }
+
+    /**
+     * @param float $shippingCost
+     */
+    public function setRefundedShippingCost($shippingCost)
+    {
+        $this->refundedShippingCost = $shippingCost;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRefundedShippingCost()
+    {
+        return $this->refundedShippingCost;
     }
 
     /**
@@ -126,6 +155,23 @@ class Order
     }
 
     /**
+     * @return bool
+     */
+    public function isOrderRefunded()
+    {
+      if ($this->getSubtotal() == $this->getRefundedAmount()) return true;
+    }
+
+
+    /**
+     * Set order status refunded
+     **/
+    public function refundOrder() {
+      $this->setShippingCost('refunded');
+      $this->setStatus('refunded');
+    }
+
+    /**
      * @return array
      */
     public function getItems()
@@ -158,6 +204,7 @@ class Order
     {
       $this->refundedItems[] = $item;
       $this->setStatus('partially_refunded');
+
     }
 
     /**
@@ -172,6 +219,17 @@ class Order
       }
 
       return $refundedAmount;
+    }
+
+    /**
+     * Refund shipping cost
+     */
+    public function refundShipping()
+    {
+      $this->setRefundedShippingCost($this->getShippingCost());
+      $this->setShippingCost('refunded');
+
+      if ($this->isOrderRefunded()) $this->refundOrder();
     }
 
 }
