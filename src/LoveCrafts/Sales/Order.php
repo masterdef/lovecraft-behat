@@ -159,7 +159,8 @@ class Order
      */
     public function isOrderRefunded()
     {
-      if ($this->getSubtotal() == $this->getRefundedAmount()) return true;
+      if (($this->getGrandTotal() + $this->getRefundedShippingCost()) == $this->getRefundedAmount()) return true;
+      return false;
     }
 
 
@@ -218,7 +219,7 @@ class Order
         $refundedAmount += $item['qty'] * $orderItem['unit_price'];
       }
 
-      return $refundedAmount;
+      return $refundedAmount + $this->getRefundedShippingCost();
     }
 
     /**

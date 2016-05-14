@@ -47,7 +47,7 @@ Feature: Sales Orders
     And the refunded amount is 44.50
 
   Scenario: Shipment cost is refunded
-    When action the shipping cost is refunded
+    When the shipping cost is refunded
     Then the shipping cost refunded is 4.50
     And the refunded amount is 4.50
 
@@ -65,7 +65,7 @@ Feature: Sales Orders
       | SKU1 | 2   |
       | SKU2 | 1   |
       | SKU3 | 5   |
-    And the action shipping cost is refunded
+    And the shipping cost is refunded
     Then the number of items refunded is 8
     And the status is refunded
     And the refunded amount is 49.00
